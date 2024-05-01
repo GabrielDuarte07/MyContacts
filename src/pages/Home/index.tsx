@@ -1,12 +1,14 @@
 import React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 import FormNewContact from '../../components/FormNewContact';
+import ContactList from '../../components/ContactList';
 
 const Home = (): React.JSX.Element => {
   return (
     <SafeAreaView style={styles.safeView}>
       <View style={styles.container}>
         <FormNewContact />
+        <ContactList />
       </View>
     </SafeAreaView>
   );

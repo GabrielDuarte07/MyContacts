@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -6,24 +6,63 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import {IFormContact, ContactContext} from '../../contexts/ContactsContext';
 
 const FormNewContact = (): React.JSX.Element => {
+  const [dataForm, setDataForm] = useState<IFormContact>({} as IFormContact);
+  const {addContact} = useContext(ContactContext);
+
+  const handleChangeData = (
+    field: Exclude<keyof IFormContact, 'id'>,
+    value: string,
+  ): void => {
+    const dataFormTemp = {...dataForm};
+    dataFormTemp[field] = value;
+    setDataForm(dataFormTemp);
+  };
+
+  const handleAddContact = (): void => {
+    const dataTemp = {...dataForm};
+    const command = addContact(dataTemp);
+    if (command) {
+      setDataForm({} as IFormContact);
+    }
+  };
+
   return (
     <View style={styles.formContainer}>
       <Text style={styles.title}>My Contacts</Text>
       <View style={styles.fieldContainer}>
         <Text style={styles.fieldTitle}>Name</Text>
-        <TextInput style={styles.textInput} keyboardType="default" />
+        <TextInput
+          style={styles.textInput}
+          keyboardType="default"
+          onChangeText={value => handleChangeData('name', value)}
+          value={dataForm.name}
+        />
       </View>
       <View style={styles.fieldContainer}>
         <Text style={styles.fieldTitle}>E-mail</Text>
-        <TextInput style={styles.textInput} keyboardType="email-address" />
+        <TextInput
+          style={styles.textInput}
+          keyboardType="email-address"
+          onChangeText={value => handleChangeData('email', value)}
+          value={dataForm.email}
+        />
       </View>
       <View style={styles.fieldContainer}>
         <Text style={styles.fieldTitle}>Phone</Text>
-        <TextInput style={styles.textInput} keyboardType="phone-pad" />
+        <TextInput
+          style={styles.textInput}
+          keyboardType="phone-pad"
+          onChangeText={value => handleChangeData('phone', value)}
+          value={dataForm.phone}
+        />
       </View>
-      <TouchableOpacity activeOpacity={0.7} style={styles.buttonAdd}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.buttonAdd}
+        onPress={handleAddContact}>
         <Text style={styles.buttonAddText}>Add Contact</Text>
       </TouchableOpacity>
     </View>
@@ -32,7 +71,7 @@ const FormNewContact = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
   formContainer: {
-    flex: 1,
+    marginBottom: 20,
   },
   title: {
     color: '#e7e4e4',
@@ -59,6 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3c92e7dc',
     borderRadius: 8,
     paddingVertical: 10,
+    marginBottom: 15,
   },
   buttonAddText: {
     color: '#e7e4e4',
