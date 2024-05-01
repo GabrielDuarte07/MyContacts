@@ -21,9 +21,9 @@ const FormNewContact = (): React.JSX.Element => {
     setDataForm(dataFormTemp);
   };
 
-  const handleAddContact = (): void => {
+  const handleAddContact = async (): Promise<void> => {
     const dataTemp = {...dataForm};
-    const command = addContact(dataTemp);
+    const command = await addContact(dataTemp);
     if (command) {
       setDataForm({} as IFormContact);
     }
